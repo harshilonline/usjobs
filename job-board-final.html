@@ -1,67 +1,149 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>US Jobs Board</title>
+<title>US Jobs Board · Mandala of Light</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap');
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'DM Sans', sans-serif; background: #f5f4f0; color: #1a1a1a; min-height: 100vh; }
-  .topbar { background: #1a1a1a; padding: 1rem 1.5rem; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
-  .logo { display: flex; align-items: center; gap: 8px; }
-  .logo-dot { width: 8px; height: 8px; border-radius: 50%; background: #4ade80; }
-  .logo-text { font-size: 15px; font-weight: 600; color: #fff; letter-spacing: -0.02em; }
-  .logo-sub { font-size: 12px; color: #555; margin-left: 4px; }
-  .top-right { display: flex; align-items: center; gap: 12px; }
-  .count { font-family: 'DM Mono', monospace; font-size: 12px; color: #555; }
-  .updated { font-family: 'DM Mono', monospace; font-size: 11px; color: #444; }
-  .main { padding: 1.5rem; max-width: 1280px; margin: 0 auto; }
-  .filters { display: flex; gap: 8px; margin-bottom: 1.25rem; flex-wrap: wrap; align-items: center; }
-  .search-wrap { flex: 1; min-width: 200px; position: relative; }
-  .search-wrap input { width: 100%; padding: 9px 12px 9px 36px; border: 1.5px solid #e0e0e0; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 13px; background: #fff; outline: none; transition: border-color 0.15s; }
-  .search-wrap input:focus { border-color: #1a1a1a; }
-  .search-icon { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); font-size: 15px; color: #bbb; }
-  select { padding: 9px 28px 9px 11px; border: 1.5px solid #e0e0e0; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 13px; background: #fff; cursor: pointer; outline: none; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23999' stroke-width='1.5' stroke-linecap='round' fill='none'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 9px center; }
-  select:focus { border-color: #1a1a1a; }
-  .clear-btn { font-size: 12px; color: #aaa; background: none; border: none; cursor: pointer; padding: 4px 8px; border-radius: 6px; }
-  .clear-btn:hover { color: #1a1a1a; background: #eee; }
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 12px; }
-  .card { background: #fff; border-radius: 12px; padding: 1.1rem 1.2rem; border: 1.5px solid #ebebeb; transition: border-color 0.15s, transform 0.15s, box-shadow 0.15s; display: flex; flex-direction: column; gap: 9px; }
-  .card:hover { border-color: #ccc; transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,0.06); }
-  .card-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
-  .card-left { display: flex; align-items: center; gap: 10px; min-width: 0; }
-  .avatar { width: 36px; height: 36px; border-radius: 8px; background: #f0f0ec; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; color: #666; flex-shrink: 0; border: 1px solid #e8e8e4; }
-  .card-titles { min-width: 0; }
-  .card-title { font-size: 14px; font-weight: 600; color: #1a1a1a; line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .card-sub { font-size: 11px; color: #888; margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .card-agency { font-size: 10px; color: #bbb; }
-  .status-select { font-size: 10px; padding: 3px 8px; border-radius: 20px; border: 1px solid; cursor: pointer; font-family: 'DM Mono', monospace; font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; outline: none; appearance: none; flex-shrink: 0; }
-  .status-New { background: #f0fdf4; color: #15803d; border-color: #bbf7d0; }
-  .status-Reviewed { background: #eff6ff; color: #1d4ed8; border-color: #bfdbfe; }
-  .status-Applied { background: #fefce8; color: #854d0e; border-color: #fef08a; }
-  .status-Pass { background: #f9fafb; color: #6b7280; border-color: #e5e7eb; }
-  .pills { display: flex; flex-wrap: wrap; gap: 4px; }
-  .pill { font-size: 11px; padding: 2px 8px; border-radius: 20px; }
-  .pill-loc { background: #f0f0ec; color: #666; }
-  .pill-remote { background: #eff6ff; color: #1d4ed8; }
-  .pill-hybrid { background: #fefce8; color: #92400e; }
-  .pill-type { background: #1a1a1a; color: #e8e6e0; }
-  .pill-salary { background: #f0fdf4; color: #15803d; }
-  .skills-label { font-family: 'DM Mono', monospace; font-size: 10px; color: #ccc; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 3px; }
-  .skill-tags { display: flex; flex-wrap: wrap; gap: 3px; }
-  .skill-tag { font-size: 10px; padding: 2px 7px; border-radius: 4px; background: #f5f4f0; color: #666; border: 0.5px solid #e8e8e4; }
-  .resp { font-size: 11px; color: #888; line-height: 1.55; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-  .card-footer { display: flex; justify-content: space-between; align-items: flex-end; padding-top: 8px; border-top: 1px solid #f2f2f0; }
-  .recruiter { font-size: 11px; color: #aaa; line-height: 1.5; min-width: 0; overflow: hidden; }
-  .recruiter strong { color: #777; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .recruiter a { color: #aaa; text-decoration: none; font-size: 10px; }
-  .recruiter a:hover { color: #555; }
-  .card-date { font-family: 'DM Mono', monospace; font-size: 10px; color: #ccc; white-space: nowrap; flex-shrink: 0; }
-  .empty { grid-column: 1/-1; text-align: center; padding: 4rem; color: #bbb; }
-  .empty-icon { font-size: 40px; margin-bottom: 12px; }
-  .empty-title { font-size: 16px; font-weight: 500; color: #999; margin-bottom: 6px; }
-  @media (max-width: 600px) { .main { padding: 1rem; } .topbar { padding: 0.85rem 1rem; } .grid { grid-template-columns: 1fr; } }
+  *{box-sizing:border-box;margin:0;padding:0;}
+
+  :root{
+    --bg:#f5f4f0;--surface:#fff;--border:#e8e8e4;--border2:#f2f2f0;
+    --text1:#1a1a1a;--text2:#666;--text3:#aaa;--text4:#ccc;
+    --bar:#1a1a1a;--bar-text:#fff;--bar-sub:#555;
+    --input-bg:#fff;--input-border:#e0e0e0;
+    --tag-bg:#f5f4f0;--tag-border:#e8e8e4;
+    --type-bg:#1a1a1a;--type-text:#e8e6e0;
+    --remote-bg:#eff6ff;--remote-text:#1d4ed8;
+    --hybrid-bg:#fefce8;--hybrid-text:#92400e;
+    --salary-bg:#f0fdf4;--salary-text:#15803d;
+    --avatar-bg:#f0f0ec;
+    --tbl-head:#f9f9f7;--tbl-hover:#fafaf8;
+    --shadow:0 4px 16px rgba(0,0,0,0.06);
+    --new-bg:#f0fdf4;--new-c:#15803d;--new-b:#bbf7d0;
+    --rev-bg:#eff6ff;--rev-c:#1d4ed8;--rev-b:#bfdbfe;
+    --app-bg:#fefce8;--app-c:#854d0e;--app-b:#fef08a;
+    --pass-bg:#f9fafb;--pass-c:#6b7280;--pass-b:#e5e7eb;
+  }
+  [data-theme="dark"]{
+    --bg:#111;--surface:#1c1c1e;--border:#2c2c2e;--border2:#242426;
+    --text1:#f0efeb;--text2:#888;--text3:#555;--text4:#333;
+    --bar:#0a0a0a;--bar-text:#f0efeb;--bar-sub:#444;
+    --input-bg:#1c1c1e;--input-border:#2c2c2e;
+    --tag-bg:#242426;--tag-border:#2c2c2e;
+    --type-bg:#f0efeb;--type-text:#111;
+    --remote-bg:#1e2a3a;--remote-text:#6ba3d6;
+    --hybrid-bg:#2a2410;--hybrid-text:#c9a84c;
+    --salary-bg:#0f2a1a;--salary-text:#4ade80;
+    --avatar-bg:#242426;
+    --tbl-head:#161618;--tbl-hover:#1f1f21;
+    --shadow:0 4px 20px rgba(0,0,0,0.3);
+    --new-bg:#0f2a1a;--new-c:#4ade80;--new-b:#14532d;
+    --rev-bg:#1e2a3a;--rev-c:#6ba3d6;--rev-b:#1e3a5f;
+    --app-bg:#2a2410;--app-c:#c9a84c;--app-b:#3d3010;
+    --pass-bg:#222;--pass-c:#666;--pass-b:#333;
+  }
+
+  body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text1);min-height:100vh;transition:background .2s,color .2s;}
+
+  /* topbar */
+  .topbar{background:var(--bar);padding:1rem 1.5rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;gap:12px;flex-wrap:wrap;}
+  .logo{display:flex;align-items:center;gap:8px;}
+  .logo-dot{width:8px;height:8px;border-radius:50%;background:#4ade80;flex-shrink:0;}
+  .logo-text{font-size:15px;font-weight:600;color:var(--bar-text);letter-spacing:-.02em;}
+  .logo-sub{font-size:12px;color:var(--bar-sub);margin-left:4px;}
+  .top-right{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+  .count{font-family:'DM Mono',monospace;font-size:12px;color:var(--bar-sub);}
+  .updated{font-family:'DM Mono',monospace;font-size:11px;color:var(--bar-sub);}
+  .icon-btn{background:none;border:1px solid #2a2a2a;border-radius:6px;padding:5px 10px;cursor:pointer;font-size:12px;color:var(--bar-sub);transition:all .15s;white-space:nowrap;}
+  .icon-btn:hover{border-color:#555;color:var(--bar-text);}
+  .icon-btn.active{border-color:#4ade80;color:#4ade80;}
+
+  /* filters */
+  .main{padding:1.5rem;max-width:1280px;margin:0 auto;}
+  .filters{display:flex;gap:8px;margin-bottom:1.25rem;flex-wrap:wrap;align-items:center;}
+  .sw{flex:1;min-width:200px;position:relative;}
+  .sw input{width:100%;padding:9px 12px 9px 36px;border:1.5px solid var(--input-border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;background:var(--input-bg);color:var(--text1);outline:none;transition:border-color .15s;}
+  .sw input:focus{border-color:var(--text1);}
+  .sw input::placeholder{color:var(--text3);}
+  .si{position:absolute;left:11px;top:50%;transform:translateY(-50%);font-size:15px;color:var(--text3);}
+  select{padding:9px 28px 9px 11px;border:1.5px solid var(--input-border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;background:var(--input-bg);color:var(--text1);cursor:pointer;outline:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23999' stroke-width='1.5' stroke-linecap='round' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 9px center;}
+  select:focus{border-color:var(--text1);}
+  .clear-btn{font-size:12px;color:var(--text3);background:none;border:none;cursor:pointer;padding:4px 8px;border-radius:6px;}
+  .clear-btn:hover{color:var(--text1);background:var(--border);}
+
+  /* card view */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:12px;}
+  .grid.hidden{display:none;}
+  .card{background:var(--surface);border-radius:12px;padding:1.1rem 1.2rem;border:1.5px solid var(--border);transition:border-color .15s,transform .15s,box-shadow .15s;display:flex;flex-direction:column;gap:9px;}
+  .card:hover{border-color:var(--text2);transform:translateY(-2px);box-shadow:var(--shadow);}
+  .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;}
+  .cl{display:flex;align-items:center;gap:10px;min-width:0;}
+  .av{width:36px;height:36px;border-radius:8px;background:var(--avatar-bg);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--text2);flex-shrink:0;border:1px solid var(--border);}
+  .ct{min-width:0;}
+  .ctitle{font-size:14px;font-weight:600;color:var(--text1);line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .csub{font-size:11px;color:var(--text2);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .cagency{font-size:10px;color:var(--text3);}
+  .ss{font-size:10px;padding:3px 8px;border-radius:20px;border:1px solid;cursor:pointer;font-family:'DM Mono',monospace;font-weight:500;letter-spacing:.04em;text-transform:uppercase;outline:none;appearance:none;flex-shrink:0;}
+  .ss.status-New{background:var(--new-bg);color:var(--new-c);border-color:var(--new-b);}
+  .ss.status-Reviewed{background:var(--rev-bg);color:var(--rev-c);border-color:var(--rev-b);}
+  .ss.status-Applied{background:var(--app-bg);color:var(--app-c);border-color:var(--app-b);}
+  .ss.status-Pass{background:var(--pass-bg);color:var(--pass-c);border-color:var(--pass-b);}
+  .pills{display:flex;flex-wrap:wrap;gap:4px;}
+  .pill{font-size:11px;padding:2px 8px;border-radius:20px;}
+  .p-loc{background:var(--tag-bg);color:var(--text2);}
+  .p-rem{background:var(--remote-bg);color:var(--remote-text);}
+  .p-hyb{background:var(--hybrid-bg);color:var(--hybrid-text);}
+  .p-type{background:var(--type-bg);color:var(--type-text);}
+  .p-sal{background:var(--salary-bg);color:var(--salary-text);}
+  .slbl{font-family:'DM Mono',monospace;font-size:10px;color:var(--text4);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px;}
+  .stags{display:flex;flex-wrap:wrap;gap:3px;}
+  .stag{font-size:10px;padding:2px 7px;border-radius:4px;background:var(--tag-bg);color:var(--text2);border:.5px solid var(--tag-border);}
+  .resp{font-size:11px;color:var(--text2);line-height:1.55;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+  .cf{display:flex;justify-content:space-between;align-items:flex-end;padding-top:8px;border-top:1px solid var(--border2);}
+  .rec{font-size:11px;color:var(--text3);line-height:1.5;min-width:0;overflow:hidden;}
+  .rec strong{color:var(--text2);display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .rec a{color:var(--text3);text-decoration:none;font-size:10px;}
+  .rec a:hover{color:var(--text1);}
+  .cdate{font-family:'DM Mono',monospace;font-size:10px;color:var(--text4);white-space:nowrap;flex-shrink:0;}
+
+  /* table view */
+  .tbl-wrap{display:none;overflow-x:auto;border-radius:12px;border:1.5px solid var(--border);background:var(--surface);}
+  .tbl-wrap.show{display:block;}
+  table{width:100%;border-collapse:collapse;font-size:13px;table-layout:auto;}
+  thead tr{background:var(--tbl-head);}
+  th{padding:10px 12px;text-align:left;font-size:11px;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);font-weight:500;border-bottom:1.5px solid var(--border);cursor:pointer;user-select:none;white-space:nowrap;}
+  th:hover{color:var(--text1);}
+  th.sorted{color:var(--text1);}
+  td{padding:10px 12px;border-bottom:1px solid var(--border2);vertical-align:top;word-break:break-word;}
+  tr:last-child td{border-bottom:none;}
+  tr:hover td{background:var(--tbl-hover);}
+  /* column widths — let content wrap naturally within these */
+  th:nth-child(1),td:nth-child(1){width:90px;min-width:90px;}
+  th:nth-child(2),td:nth-child(2){min-width:160px;}
+  th:nth-child(3),td:nth-child(3){min-width:140px;}
+  th:nth-child(4),td:nth-child(4){width:110px;min-width:90px;}
+  th:nth-child(5),td:nth-child(5){width:120px;min-width:80px;}
+  th:nth-child(6),td:nth-child(6){min-width:180px;}
+  th:nth-child(7),td:nth-child(7){min-width:160px;}
+  th:nth-child(8),td:nth-child(8){width:110px;min-width:100px;}
+  .t-title{font-weight:500;color:var(--text1);line-height:1.35;}
+  .t-sub{font-size:11px;color:var(--text2);margin-top:2px;}
+  .t-agency{font-size:10px;color:var(--text3);}
+  .t-must{font-size:11px;color:var(--text2);line-height:1.5;}
+  .t-rec{font-size:11px;color:var(--text2);}
+  .t-rec a{color:var(--text3);text-decoration:none;font-size:10px;display:block;margin-top:1px;}
+  .t-rec a:hover{color:var(--text1);}
+  .t-date{font-family:'DM Mono',monospace;font-size:11px;color:var(--text3);white-space:nowrap;}
+  /* pills in table wrap cleanly */
+  td .pill{display:inline-block;margin-bottom:3px;white-space:normal;word-break:break-word;}
+
+  /* empty */
+  .empty{text-align:center;padding:4rem;color:var(--text3);}
+  .empty-icon{font-size:40px;margin-bottom:12px;}
+  .empty-title{font-size:16px;font-weight:500;color:var(--text2);margin-bottom:6px;}
+  @media(max-width:600px){.main{padding:1rem;}.topbar{padding:.85rem 1rem;}.grid{grid-template-columns:1fr;}}
 </style>
 </head>
 <body>
@@ -72,20 +154,22 @@
     <span class="logo-sub">Mandala of Light</span>
   </div>
   <div class="top-right">
-    <span class="updated">Updated May 17, 2026</span>
+    <span class="updated">May 17, 2026</span>
     <span class="count" id="count"></span>
+    <button class="icon-btn active" id="btn-card" onclick="setView('card')">⊞ Cards</button>
+    <button class="icon-btn" id="btn-table" onclick="setView('table')">☰ Table</button>
+    <button class="icon-btn" id="btn-dark" onclick="toggleDark()">◑ Dark</button>
   </div>
 </div>
 <div class="main">
   <div class="filters">
-    <div class="search-wrap">
-      <span class="search-icon">⌕</span>
+    <div class="sw">
+      <span class="si">⌕</span>
       <input type="text" id="q" placeholder="Search jobs, skills, company, location..." oninput="render()">
     </div>
     <select id="f-type" onchange="render()">
       <option value="">All types</option>
-      <option>Full-time</option><option>Contract</option><option>W2</option>
-      <option>C2C</option><option>Contract-to-hire</option>
+      <option>Full-time</option><option>Contract</option><option>W2</option><option>C2C</option><option>Contract-to-hire</option>
     </select>
     <select id="f-loc" onchange="render()"><option value="">All locations</option></select>
     <select id="f-status" onchange="render()">
@@ -95,20 +179,32 @@
     <button class="clear-btn" onclick="clearFilters()">✕ Clear</button>
   </div>
   <div class="grid" id="grid"></div>
+  <div class="tbl-wrap" id="tbl-wrap">
+    <table>
+      <thead><tr>
+        <th onclick="sortBy('date')" id="th-date">Date ↕</th>
+        <th onclick="sortBy('title')" id="th-title">Role ↕</th>
+        <th onclick="sortBy('location')" id="th-location">Location ↕</th>
+        <th onclick="sortBy('type')" id="th-type">Type ↕</th>
+        <th>Salary / Notes</th>
+        <th>Required Skills</th>
+        <th>Recruiter</th>
+        <th>Status</th>
+      </tr></thead>
+      <tbody id="tbl-body"></tbody>
+    </table>
+  </div>
 </div>
 <script>
 const JOBS = [
-  // ── May 15 ──
   {id:'19e2cc3ad6721b1c',date:'2026-05-15',title:'React Developer',company:'',agency:'iBridge Tech Soft',recruiter:'Rahul Kumar Singh',email:'rahul.kumar@ibridgetechsoft.com',phone:'',location:'Whippany NJ / Tampa FL (Onsite, Locals only)',type:'Contract',salary:'',must:'React, local to Whippany NJ or Tampa FL',resp:'React developer onsite — local candidates to Whippany NJ or Tampa FL only.'},
   {id:'19e2cc374622d6de',date:'2026-05-15',title:'UI / ReactJS Developer',company:'',agency:'ClifyX Inc.',recruiter:'Saurabh Pardeshi',email:'saurabhkp@clifyx.com',phone:'',location:'Phoenix, AZ (Onsite)',type:'W2',salary:'',must:'UI development, ReactJS, W2',resp:'UI/ReactJS Developer onsite in Phoenix AZ on W2 contract.'},
   {id:'19e2cc33d3621efb',date:'2026-05-15',title:'Technical Lead/Architect',company:'',agency:'Tanisha Systems',recruiter:'Tarun M',email:'tarun@tanishasystems.com',phone:'',location:'Sunnyvale, CA (Onsite)',type:'Full-time',salary:'',must:'Technical Lead or Architect, senior level',resp:'Technical Lead/Architect full-time role onsite in Sunnyvale CA.'},
-  // ── May 14 ──
   {id:'19e2984dff9c937d',date:'2026-05-14',title:'Full Stack Developer (React/TypeScript/MongoDB)',company:'',agency:'Tanisha Systems',recruiter:'Santosh Kumar',email:'Santosh.k@tanishasystems.com',phone:'',location:'Santa Clara, CA (Onsite)',type:'Full-time',salary:'',must:'React, TypeScript, MongoDB, full stack',resp:'Full Stack Developer FTE role onsite in Santa Clara CA.'},
   {id:'19e286e544ec065f',date:'2026-05-14',title:'Lead Angular Engineer',company:'',agency:'Synchrony Corp',recruiter:'Nagarjuna',email:'nagarjuna.n@synchronycorp.com',phone:'',location:'Philadelphia, PA (Onsite)',type:'Full-time',salary:'Immediate interview',must:'Angular, lead engineer, senior level',resp:'Lead Angular Engineer full-time role onsite in Philadelphia PA. Immediate interviews.'},
   {id:'19e27a00a9079986',date:'2026-05-14',title:'Java Developer',company:'',agency:'Siri Info Inc.',recruiter:'Anilkumar Ellamla',email:'anilkumar@siriinfoinc.com',phone:'',location:'Austin, TX (Onsite)',type:'Contract',salary:'',must:'Java development',resp:'Java Developer onsite contract role in Austin TX.'},
   {id:'19e279fd7775baa9',date:'2026-05-14',title:'Senior UI Developer (Angular & React JS)',company:'',agency:'Excelon Solutions',recruiter:'Rahul Singh',email:'rahul.singh@excelonsolutions.com',phone:'',location:'Woodland Hills, CA (Onsite only)',type:'Contract',salary:'',must:'Angular, React JS, senior UI',resp:'Senior UI Developer with Angular and React JS, onsite only in Woodland Hills CA.'},
   {id:'19e275fb8be72276',date:'2026-05-14',title:'Node.js Developer',company:'',agency:'Evizot',recruiter:'Karan Verma',email:'karan.verma@evizot.com',phone:'',location:'',type:'Contract',salary:'',must:'Node.js development',resp:'Node.js Developer contract opportunity.'},
-  // ── May 13 ──
   {id:'19e22c25bee3ffe2',date:'2026-05-13',title:'Senior UX Designer',company:'',agency:'ClifyX Inc.',recruiter:'Shivendra Nath Tiwari',email:'shivendra@clifyx.com',phone:'',location:'Whippany, NJ (Hybrid)',type:'Contract',salary:'12+ months',must:'UX Design, senior level',resp:'Senior UX Designer for 12+ month hybrid contract in Whippany NJ.'},
   {id:'19e2265f422f4aec',date:'2026-05-13',title:'Accessibility Test Engineer',company:'',agency:'Kaygen',recruiter:'Sunil Kumar Gautam',email:'sunil.k@kaygen.com',phone:'',location:'San Jose, CA (Onsite)',type:'Contract',salary:'',must:'Accessibility testing, QA, WCAG',resp:'Accessibility Test Engineer onsite contract in San Jose CA.'},
   {id:'19e2265c80f918a7',date:'2026-05-13',title:'UX Engineer',company:'',agency:'ClifyX Inc.',recruiter:'Shivam Ojha',email:'shivam.ojha@clifyx.com',phone:'',location:'Whippany, NJ (Onsite)',type:'Contract',salary:'',must:'UX Engineering, User Experience Design',resp:'UX Engineer role onsite in Whippany NJ.'},
@@ -116,139 +212,108 @@ const JOBS = [
   {id:'19e22654ddb2d0ff',date:'2026-05-13',title:'React Developer',company:'',agency:'Yotta Systems',recruiter:'Shivam Nirwal',email:'shivam@yottasys.com',phone:'',location:'Pittsburgh, PA (Onsite)',type:'Contract',salary:'',must:'React development',resp:'React Developer onsite contract in Pittsburgh PA.'},
   {id:'19e226515c240edf',date:'2026-05-13',title:'React Developer',company:'',agency:'Yotta Systems',recruiter:'Kapil Dubey',email:'kapil@yottasys.com',phone:'',location:'Pittsburgh, PA (Onsite)',type:'W2',salary:'',must:'React, W2 contract',resp:'React Developer W2 contract role onsite in Pittsburgh PA.'},
   {id:'19e225c563d8e3bc',date:'2026-05-13',title:'GenAI Engineer',company:'',agency:'Softcom Systems',recruiter:'Harsha',email:'notify@oorwinmail.com',phone:'',location:'San Jose, CA (Hybrid, 3 days)',type:'Contract',salary:'',must:'GenAI, AI engineering',resp:'GenAI Engineer hybrid contract in San Jose CA, 3 days onsite.'},
-  // ── May 12 ──
   {id:'19e1ded596f69618',date:'2026-05-12',title:'Sr. Developer',company:'',agency:'Intellisoft Technologies',recruiter:'Vicky M',email:'vicky@intellisofttech.com',phone:'',location:'Westlake, TX (Onsite)',type:'Other',salary:'C2C or W2',must:'Senior development, C2C or W2',resp:'Exclusive Sr. Developer role onsite in Westlake TX. C2C or W2.'},
   {id:'19e1c888d72d26d2',date:'2026-05-12',title:'Business Analyst',company:'',agency:'Rang Technologies',recruiter:'Hitesh Singh',email:'hitesh.singh@sales.rangtech.net',phone:'',location:'Cupertino, CA (Onsite)',type:'W2',salary:'Urgent',must:'Business Analysis, W2',resp:'Urgent Business Analyst W2 contract role onsite in Cupertino CA.'},
-  // ── May 11 ──
   {id:'19e1924fd51c37af',date:'2026-05-11',title:'Business Analyst PM / PMO',company:'',agency:'E-Solutions Inc.',recruiter:'Vivek Anand',email:'vivek.a@e-solutionsinc.com',phone:'',location:'Cupertino, CA (Onsite)',type:'Contract',salary:'',must:'Business Analysis, PM/PMO',resp:'Business Analyst PM/PMO opportunity onsite in Cupertino CA.'},
   {id:'19e180d20f8e2e08',date:'2026-05-11',title:'Salesforce Technical Architect',company:'',agency:'Okaya Inc.',recruiter:'Akash Kaushik',email:'akash.kaushik@okayainc.com',phone:'',location:'Remote',type:'Full-time',salary:'100% Remote',must:'Salesforce Technical Architecture',resp:'Full-time Salesforce Technical Architect, 100% remote.'},
-  // ── May 10 ──
-  {id:'19e0f418acdf02b4',date:'2026-05-10',title:'ServiceNow PM / BA (Modernization)',company:'',agency:'HireX Corp',recruiter:'Kirti Yadav',email:'Kirti@hirexcorp.com',phone:'',location:'Remote',type:'Contract',salary:'',must:'ServiceNow, PM, Business Analysis, modernization',resp:'ServiceNow PM/BA for modernization project on remote contract.'},
+  {id:'19e0f418acdf02b4',date:'2026-05-10',title:'ServiceNow PM / BA (Modernization)',company:'',agency:'HireX Corp',recruiter:'Kirti Yadav',email:'Kirti@hirexcorp.com',phone:'',location:'Remote',type:'Contract',salary:'',must:'ServiceNow, PM, Business Analysis',resp:'ServiceNow PM/BA for modernization project on remote contract.'},
   {id:'19e0f383cecd0446',date:'2026-05-10',title:'Technical Lead (Workspace Deployment)',company:'',agency:'EA Team',recruiter:'Dazy Kumari',email:'dazy@eateam.com',phone:'',location:'Remote',type:'Contract',salary:'',must:'Technical lead, workspace deployment',resp:'Technical Lead/Engineer for Workspace Deployment on remote contract.'},
   {id:'19e0f3728baacc81',date:'2026-05-10',title:'Salesforce QA',company:'',agency:'JConnect Inc.',recruiter:'Piyush Sri',email:'piyush@jconnectinc.com',phone:'',location:'Remote',type:'Contract',salary:'',must:'Salesforce QA, quality assurance',resp:'Salesforce QA remote contract opportunity.'},
   {id:'19e0f304c1718f04',date:'2026-05-10',title:'ServiceNow Product Owner',company:'Barclays',agency:'EIT Professionals',recruiter:'Deepak',email:'deepak@eitprofessionals.com',phone:'',location:'Whippany, NJ (Hybrid)',type:'Contract',salary:'',must:'ServiceNow, Product Owner',resp:'ServiceNow Product Owner for Barclays hybrid contract in Whippany NJ.'},
-  // ── May 9 ──
-  {id:'19e0a92cc78ba5b3',date:'2026-05-09',title:'Salesforce Administrator',company:'State of SC',agency:'E-Solutions Inc.',recruiter:'Vaibhav Rana',email:'vaibhav.r@e-solutionsinc.com',phone:'+1 (408) 451-1991',location:'Remote',type:'Contract',salary:'12 months',must:'Salesforce Admin certification, 5+ yrs Salesforce Admin, user management, sandbox management, AWS Connect, ServiceNow, Azure AD',resp:'Maintain and enhance Salesforce instance including user management, sandbox environments, and integrations with AWS Connect, ServiceNow, and Azure AD.'},
-  // ── May 8 ──
+  {id:'19e0a92cc78ba5b3',date:'2026-05-09',title:'Salesforce Administrator',company:'State of SC',agency:'E-Solutions Inc.',recruiter:'Vaibhav Rana',email:'vaibhav.r@e-solutionsinc.com',phone:'+1 (408) 451-1991',location:'Remote',type:'Contract',salary:'12 months',must:'Salesforce Admin certification, 5+ yrs Salesforce Admin, user management, AWS Connect, ServiceNow, Azure AD',resp:'Maintain and enhance Salesforce instance including user management, sandbox environments, and integrations with AWS Connect, ServiceNow, and Azure AD.'},
   {id:'19e098525c07d9a4',date:'2026-05-08',title:'Lead/Sr Salesforce Developer',company:'Coca-Cola',agency:'Accroid Inc.',recruiter:'Dushyant Singh',email:'dsingh@accroid.com',phone:'(678) 528-6628',location:'Atlanta, GA (Hybrid)',type:'C2C',salary:'$75-77/hr C2C',must:'7+ yrs Salesforce and/or Java, Lightning/Apex, Java, AWS to Azure migration, AI coding',resp:'Complete rebuild of internal systems migrating from AWS to Azure. Rebuilding Salesforce Lightning/Apex components.'},
-  // ── May 7 ──
-  {id:'19e032f15bb601ff',date:'2026-05-07',title:'Java Developer (Payment Tech)',company:'',agency:'Tekaccel',recruiter:'Shubham Sharma',email:'Shubham@tekaccel.com',phone:'',location:'Chicago IL / New Jersey (Onsite)',type:'W2',salary:'',must:'8+ yrs Java, Core Java, OOP, Oracle/SQL, Spring, NoSQL, Agile/Jira/Jenkins/Git',resp:'Deliver creative software solutions, develop secure production code, perform code reviews. Financial domain strongly preferred.'},
-  {id:'19e0152a95cd1076',date:'2026-05-07',title:'SFDC Architect',company:'',agency:'Centraprise Global',recruiter:'Shivam Gupta',email:'g.shivam@centraprise.com',phone:'',location:'Wilmington, DE (Onsite)',type:'Full-time',salary:'',must:'Salesforce Architect, Sales/Service/Commerce Cloud, SAP integration (S4HANA), data modeling, data migration',resp:'Lead design of scalable Salesforce solutions. Architect Salesforce-SAP integrations covering Order-to-Cash, pricing, inventory.'},
-  // ── May 6 ──
+  {id:'19e032f15bb601ff',date:'2026-05-07',title:'Java Developer (Payment Tech)',company:'',agency:'Tekaccel',recruiter:'Shubham Sharma',email:'Shubham@tekaccel.com',phone:'',location:'Chicago IL / New Jersey (Onsite)',type:'W2',salary:'',must:'8+ yrs Java, Core Java, OOP, Oracle/SQL, Spring, NoSQL, Agile/Jenkins/Git',resp:'Deliver creative software solutions, develop secure production code, perform code reviews. Financial domain strongly preferred.'},
+  {id:'19e0152a95cd1076',date:'2026-05-07',title:'SFDC Architect',company:'',agency:'Centraprise Global',recruiter:'Shivam Gupta',email:'g.shivam@centraprise.com',phone:'',location:'Wilmington, DE (Onsite)',type:'Full-time',salary:'',must:'Salesforce Architect, Sales/Service/Commerce Cloud, SAP integration (S4HANA), data modeling',resp:'Lead design of scalable Salesforce solutions. Architect Salesforce-SAP integrations covering Order-to-Cash, pricing, inventory.'},
   {id:'19e001882674ebe4',date:'2026-05-06',title:'Backend Developer',company:'',agency:'Tekgence',recruiter:'Murali Murali',email:'murali_t@tekgence.com',phone:'',location:'Sunnyvale, CA (Onsite)',type:'W2',salary:'',must:'Backend development, W2 only',resp:'Backend developer role onsite in Sunnyvale CA on W2 basis.'},
-  {id:'19dfdde123d4b4f2',date:'2026-05-06',title:'Front-End Developer',company:'',agency:'Yotta Systems Inc.',recruiter:'Utkarsh Singh',email:'utkarsh@yottasys.com',phone:'',location:'Chandler, AZ (Onsite)',type:'W2',salary:'',must:'React.js or Angular, JavaScript, HTML5, CSS3, REST APIs, Git, Redux/NgRx, Webpack',resp:'Develop scalable responsive web applications using React or Angular. Integrate with RESTful APIs in Agile/Scrum environment.'},
+  {id:'19dfdde123d4b4f2',date:'2026-05-06',title:'Front-End Developer',company:'',agency:'Yotta Systems Inc.',recruiter:'Utkarsh Singh',email:'utkarsh@yottasys.com',phone:'',location:'Chandler, AZ (Onsite)',type:'W2',salary:'',must:'React.js or Angular, JavaScript, HTML5, CSS3, REST APIs, Redux/NgRx, Webpack',resp:'Develop scalable responsive web applications using React or Angular. Integrate with RESTful APIs in Agile/Scrum environment.'},
   {id:'19dfdddd10e93d51',date:'2026-05-06',title:'GCP Cloud Solutions Architect',company:'Aetna',agency:'TekIntegral Inc.',recruiter:'Nishat Afza',email:'nishat@tekintegral.com',phone:'',location:'Remote',type:'Contract',salary:'12-18 months LTC',must:'GCP, Kafka integration/streaming, cloud architecture',resp:'Architecture role across 3 major programs at Aetna: GPS healthcare contact centers, Member Experience digital, and YAVA/Live Chat conversational AI.'},
-  // ── May 5 ──
   {id:'19df9f88c50a4c2a',date:'2026-05-05',title:'UX/UI Developer with Agentic AI',company:'',agency:'Tekgence',recruiter:'Himanshu Chauhan',email:'himanshu.c@tekgence.com',phone:'',location:'Austin, TX (Onsite, 5 days/wk)',type:'Contract',salary:'',must:'8+ yrs UX/UI or frontend, React, TypeScript, HTML/CSS, developer-facing tools, GitHub workflow',resp:'Design and build AI-native Developer Portal. GitHub PR flows, Dev Container UX, SDLC agent frontends with real-time streaming.'},
   {id:'19df9f864cf023fa',date:'2026-05-05',title:'Microsoft Copilot Developer',company:'',agency:'Tekaccel',recruiter:'Divyanshu Kumar',email:'Divyanshu@tekaccel.com',phone:'469-820-0644',location:'Remote',type:'Contract',salary:'',must:'Microsoft Copilot development',resp:'Microsoft Copilot Developer role on remote contract basis.'},
   {id:'19df995a3ff12d93',date:'2026-05-05',title:'AI Project Manager',company:'',agency:'Tekaccel',recruiter:'Ajay Pratap Singh',email:'ajay@tekaccel.com',phone:'',location:'Woodland Hills, CA (Onsite)',type:'W2',salary:'',must:'Project management, AI experience',resp:'AI Project Manager role onsite in Woodland Hills CA on W2 basis.'},
   {id:'19df9019edc0ec26',date:'2026-05-05',title:'Frontend Developer',company:'Synechron / BOA',agency:'Yotta Systems Inc.',recruiter:'Nitish Singh',email:'nitish@yottasys.com',phone:'',location:'Chandler, AZ (Onsite)',type:'W2',salary:'H1B transfer OK',must:'React.js, TypeScript, HTML5/CSS3, REST APIs, Redux, Git, Agile',resp:'Build scalable UI for Bank of America via Synechron. Develop reusable components, integrate with APIs.'},
-  // ── May 4 ──
   {id:'19df43f1f10adc04',date:'2026-05-04',title:'Salesforce Technical Lead/Architect',company:'Medtronic',agency:'HR Pundits / Randstad',recruiter:'Prashanth Kumar',email:'Prashanthk@hrpundits.com',phone:'312-216-0850',location:'Minneapolis, MN (Onsite day 1)',type:'Contract',salary:'Visa independent required',must:'10+ yrs exp, 5+ yrs Salesforce, 2+ yrs architect, CPQ/Revenue Cloud, Pricing & Contracting',resp:'Principal Salesforce Architect for Pricing & Contracting at Medtronic. Govern scalable architecture across data, integration, security.'},
   {id:'19df3e1785c05adc',date:'2026-05-04',title:'UX/UI Developer with Gen AI',company:'',agency:'Tanisha Systems',recruiter:'Ravi Ranjan',email:'ravi.ranjan@tanishasystems.com',phone:'(732) 384-0485 x641',location:'Austin, TX (Onsite)',type:'W2',salary:'Contract or Fulltime',must:'8+ yrs UX/UI or frontend, React, TypeScript, HTML/CSS, GitHub workflow',resp:'AI-native Developer Portal: GitHub PR flows, repo discovery, SDLC agent frontends, real-time streaming.'},
   {id:'19df3e14bacbf889',date:'2026-05-04',title:'Senior UX/UI Developer with Gen AI',company:'',agency:'Tanisha Systems',recruiter:'Nitish Kumar',email:'nitish.kumar@tanishasystems.com',phone:'(732) 944-0162 x707',location:'Austin, TX (Onsite)',type:'Full-time',salary:'',must:'8+ yrs UX/UI or frontend, React, TypeScript, HTML/CSS, GitHub workflows',resp:'Senior UX/UI for modern AI-native Developer Portal focused on developer productivity.'},
   {id:'19df3e1286424b84',date:'2026-05-04',title:'UX/UI Developer with Gen AI',company:'',agency:'IMCS Group',recruiter:'Mohit Sharma',email:'mohit.sharma@imcsgroup.net',phone:'(682) 271-9671',location:'Austin, TX (Onsite)',type:'Full-time',salary:'',must:'8+ yrs UX/UI or frontend, React, TypeScript, HTML/CSS, GitHub workflow',resp:'Senior UX/UI for AI-native Developer Portal. Agentic workflow builders, developer productivity UX.'},
   {id:'19df3e0cdc43265f',date:'2026-05-04',title:'UX Designer (Government)',company:'State of California',agency:'Elegant Enterprise-Wide Solutions',recruiter:'Ron DSilva',email:'ron@elegantsolutions.us',phone:'(703) 348-2865',location:'Sacramento, CA (Onsite)',type:'Contract',salary:'Gov experience mandatory',must:'3+ yrs Dynamics 365, Power BI, DocuSign, web UX for CRM/DRM, government/federal experience',resp:'UX/Interaction Designer for California Natural Resources Agency. Government experience mandatory.'},
-  // ── May 2 ──
   {id:'19de62ffa0ae4208',date:'2026-05-02',title:'Store Systems Hardware Lead',company:'Ross Stores',agency:'Accroid Inc.',recruiter:'Dushyant Singh',email:'dsingh@accroid.com',phone:'(678) 528-6628',location:'Dublin, CA (Hybrid, 3x/wk)',type:'C2C',salary:'$70/hr C2C',must:'Retail store systems/hardware, hardware certifications/rollouts, POS/handhelds, vendor management',resp:'Lead end-to-end hardware lifecycle for Ross across 2,300+ stores. Own certification, pilot, rollout of POS and handhelds.'},
-  // ── May 1 ──
   {id:'19de56fb2fe4f869',date:'2026-05-01',title:'Sr. Full Stack Engineer',company:'',agency:'Intellisoft Technologies',recruiter:'Vicky M',email:'vicky@intellisofttech.com',phone:'',location:'San Ramon, CA (Onsite)',type:'W2',salary:'W2 only',must:'Full stack development, senior level',resp:'Senior Full Stack Engineer onsite in San Ramon CA. W2 only.'},
   {id:'19de4fe3312e27a2',date:'2026-05-01',title:'Azure Application Developer',company:'',agency:'Alku',recruiter:'Mo Ali',email:'mali@alku.com',phone:'',location:'Remote',type:'Contract',salary:'3+ months',must:'Azure application development',resp:'Azure Application Developer on 3+ month fully remote contract.'},
   {id:'19de48c0f42261f8',date:'2026-05-01',title:'Senior Salesforce Developer',company:'',agency:'Primus Global',recruiter:'Narasimha',email:'nballavaram@primusglobal.com',phone:'',location:'Juno Beach, FL',type:'Contract',salary:'',must:'Salesforce, Apex, Lightning Web Components',resp:'Senior Salesforce Developer with Apex and LWC experience.'},
-  // ── Apr 30 ──
   {id:'19ddfa7b90e91775',date:'2026-04-30',title:'Salesforce Admin (Security & DevOps)',company:'',agency:'HR Pundits',recruiter:'Prashanth Kumar',email:'Prashanthk@hrpundits.com',phone:'312-216-0850',location:'Virginia (Onsite)',type:'W2',salary:'',must:'Salesforce Admin, Security, DevOps',resp:'Salesforce Admin with Security and DevOps focus for W2 contract in Virginia.'},
   {id:'19ddf453fdb6ca83',date:'2026-04-30',title:'Senior UI Developer',company:'',agency:'Excelon Solutions',recruiter:'Prakhar Srivastava',email:'psrivastava@excelonsolutions.com',phone:'',location:'Bellevue, WA (4-5 days onsite)',type:'Contract',salary:'',must:'Senior UI development',resp:'Senior UI Developer contract in Bellevue WA, 4-5 days onsite per week.'},
   {id:'19ddf3128baf5563',date:'2026-04-30',title:'Endpoint Engineer',company:'',agency:'Momento USA',recruiter:'Farman Ehsanullah',email:'farman@momentousa.com',phone:'',location:'Palo Alto, CA (Onsite)',type:'Contract',salary:'',must:'Endpoint engineering',resp:'Endpoint Engineer role onsite in Palo Alto CA.'},
-  {id:'19ddf2d41951f6d4',date:'2026-04-30',title:'Software Engineering Lead – AI-Augmented',company:'',agency:'Tekaccel',recruiter:'Kunal Dhall',email:'kunal@tekaccel.com',phone:'',location:'SF CA / Dallas TX / Austin TX (Onsite)',type:'Contract',salary:'',must:'Software engineering leadership, AI-augmented development',resp:'Software Engineering Lead focused on AI-augmented development across multiple US locations.'},
+  {id:'19ddf2d41951f6d4',date:'2026-04-30',title:'Software Engineering Lead - AI-Augmented',company:'',agency:'Tekaccel',recruiter:'Kunal Dhall',email:'kunal@tekaccel.com',phone:'',location:'SF CA / Dallas TX / Austin TX (Onsite)',type:'Contract',salary:'',must:'Software engineering leadership, AI-augmented development',resp:'Software Engineering Lead focused on AI-augmented development across multiple US locations.'},
   {id:'19ddc8d7f597bc37',date:'2026-04-30',title:'Salesforce Engineer',company:'',agency:'3B Staffing',recruiter:'Gautam Verma',email:'gautam.verma@3bstaffing.com',phone:'',location:'Cupertino, CA (Onsite)',type:'Full-time',salary:'Urgent',must:'Salesforce engineering',resp:'Urgent full-time Salesforce Engineer role onsite in Cupertino CA.'},
-  // ── Apr 29 ──
   {id:'19ddbf9b31772593',date:'2026-04-29',title:'Certified Salesforce Developer',company:'',agency:'R Consulting Inc.',recruiter:'Anamika Bachkheti',email:'aanamika@rconsultinginc.com',phone:'',location:'',type:'W2',salary:'W2 only',must:'Salesforce Developer certification',resp:'Certified Salesforce Developer on W2 basis.'},
   {id:'19ddbf9801105473',date:'2026-04-29',title:'Salesforce Technical Architect',company:'',agency:'Adroit Innovative',recruiter:'Priyanshu',email:'priyanshu.s@adroitinnovative.com',phone:'',location:'Remote',type:'Contract',salary:'',must:'Salesforce Technical Architecture',resp:'Salesforce Technical Architect on remote contract.'},
   {id:'19dd9f99d0c5232b',date:'2026-04-29',title:'UI/UX with Gen AI',company:'',agency:'Tanisha Systems',recruiter:'Shailesh Gupta',email:'Shailesh.gupta@tanishasystems.com',phone:'',location:'Austin, TX (Onsite)',type:'Other',salary:'Fulltime or C2C',must:'UI/UX, Gen AI',resp:'UI/UX with Gen AI for fulltime or C2C role onsite in Austin TX.'},
   {id:'19dd6e0039929415',date:'2026-04-29',title:'Staff Frontend Engineer',company:'',agency:'',recruiter:'Saurav KP',email:'',phone:'',location:'San Mateo, CA (Onsite)',type:'Full-time',salary:'',must:'Staff-level frontend engineering',resp:'Staff Frontend Engineer full-time role in San Mateo CA.'},
-  // ── Apr 28 ──
   {id:'19dd596853305d6b',date:'2026-04-28',title:'Helpdesk / Support Engineer',company:'',agency:'Momento USA',recruiter:'Farman Ehsanullah',email:'farman@momentousa.com',phone:'',location:'Palo Alto, CA (Onsite)',type:'Contract',salary:'',must:'Helpdesk, IT support engineering',resp:'Helpdesk/Support Engineer onsite in Palo Alto CA.'},
   {id:'19dd4cd119696569',date:'2026-04-28',title:'GenAI Technical Solutions Architect',company:'',agency:'Tanisha Systems',recruiter:'Anish Singh',email:'Anish.Singh@tanishasystems.com',phone:'',location:'Cupertino, CA (Hybrid)',type:'Contract',salary:'',must:'GenAI, solution architecture',resp:'GenAI Technical Solutions Architect hybrid role in Cupertino CA.'},
   {id:'19dd4ccc41e0febf',date:'2026-04-28',title:'Node.js / GraphQL Developer',company:'',agency:'Evizot',recruiter:'Karan Verma',email:'karan.verma@evizot.com',phone:'',location:'',type:'Contract',salary:'',must:'Node.js, GraphQL',resp:'Node.js/GraphQL Developer contract role.'},
-  // ── Apr 27 ──
   {id:'19dd08f7ee5eefa9',date:'2026-04-27',title:'UI Developer (Angular & ReactJS)',company:'',agency:'Excelon Solutions',recruiter:'Nitin Verma',email:'nitin.verma@excelonsolutions.com',phone:'',location:'Woodland Hills, CA (Onsite)',type:'W2',salary:'',must:'Angular, React JS',resp:'UI Developer with Angular and ReactJS for W2 contract in Woodland Hills CA.'},
   {id:'19dcfb93e3f18b9e',date:'2026-04-27',title:'UI Developer (React JS + Node JS)',company:'',agency:'Excelon Solutions',recruiter:'Prakhar Srivastava',email:'psrivastava@excelonsolutions.com',phone:'',location:'Austin, TX (Onsite)',type:'Contract',salary:'',must:'React JS, Node JS',resp:'UI Developer with React JS and Node JS onsite in Austin TX.'},
-  // ── Apr 25 ──
   {id:'19dc29603e30c2b3',date:'2026-04-25',title:'Salesforce Developer',company:'',agency:'',recruiter:'Francy',email:'francyegr@gmail.com',phone:'',location:'Alpharetta GA / Oakland CA',type:'Contract',salary:'',must:'Salesforce Developer',resp:'Salesforce Developer role at Alpharetta GA or Oakland CA.'},
-  // ── Apr 24 ──
   {id:'19dc0b17f7184a2e',date:'2026-04-24',title:'Frontend Tech Lead (Angular)',company:'',agency:'Headwit Global',recruiter:'Rashmi Raj',email:'rashmi@headwitglobal.com',phone:'',location:'Jersey City, NJ (Hybrid)',type:'Contract',salary:'Any visa',must:'Angular, Frontend Tech Lead',resp:'Frontend Tech Lead with Angular for hybrid contract in Jersey City NJ.'},
   {id:'19dc053036319f06',date:'2026-04-24',title:'IT Business Relationship Manager',company:'',agency:'Rang Technologies',recruiter:'Nagender Baghel',email:'nagender.baghel@sales.rangtech.net',phone:'',location:'Alameda, CA (Onsite)',type:'W2',salary:'',must:'IT BRM, business relationship management',resp:'IT Business Relationship Manager W2 contract in Alameda CA.'},
   {id:'19dbda4976a228fe',date:'2026-04-24',title:'Full Stack Engineer (React/Node)',company:'',agency:'Excelon Solutions',recruiter:'Shivani KM',email:'shivani@excelonsolutions.com',phone:'',location:'Sunnyvale, CA (Hybrid)',type:'W2',salary:'W2 only, urgent',must:'React, Node.js, full stack',resp:'Full Stack Engineer with React/Node for urgent W2 hybrid contract in Sunnyvale CA.'},
-  // ── Apr 23 ──
   {id:'19dbbf94493a7af2',date:'2026-04-23',title:'UI Tech Lead',company:'',agency:'Tek Leaders',recruiter:'Sanjay Padupu',email:'sanju@tekleaders.com',phone:'',location:'',type:'Contract',salary:'',must:'UI Tech Lead',resp:'UI Tech Lead contract position.'},
   {id:'19dbbf89c18e3a08',date:'2026-04-23',title:'React Full Stack Developer',company:'',agency:'Centillionz',recruiter:'Kartik L',email:'Kartik@centillionz.com',phone:'',location:'',type:'Contract',salary:'',must:'React, Full Stack',resp:'React Full Stack Developer contract role.'},
-  // ── Apr 22 ──
   {id:'19db751f79c3af25',date:'2026-04-22',title:'Salesforce Lead Developer',company:'',agency:'Navitas Solutions',recruiter:'Shubham Sharma',email:'shubham.sharma@navitassols.com',phone:'',location:'Remote',type:'Contract',salary:'',must:'Salesforce Lead Developer',resp:'Salesforce Lead Developer fully remote contract.'},
-  // ── Apr 21 ──
   {id:'19db253214767877',date:'2026-04-21',title:'Salesforce UAT Automation Engineer',company:'',agency:'Tanisha Systems',recruiter:'Aditya Gautam',email:'Aditya.Gautam@tanishasystems.com',phone:'',location:'Sunnyvale, CA (Onsite)',type:'Full-time',salary:'',must:'Salesforce UAT, Test Automation',resp:'Salesforce UAT Automation Engineer full-time role onsite in Sunnyvale CA.'},
   {id:'19db18fb7f2967ef',date:'2026-04-21',title:'Cyber Security Analyst',company:'',agency:'Technix Online',recruiter:'Kirpa Yadav',email:'k.yadav@technixonline.com',phone:'',location:'Montgomery, AL (100% Onsite)',type:'Contract',salary:'',must:'Cyber Security, security analysis',resp:'Urgent Cyber Security Analyst role 100% onsite in Montgomery AL.'},
   {id:'19db0b227fe89671',date:'2026-04-21',title:'Accessibility Engineer (Front-End)',company:'',agency:'Tanisha Systems',recruiter:'Anish Singh',email:'Anish.Singh@tanishasystems.com',phone:'',location:'Redmond, WA (Onsite)',type:'Contract',salary:'',must:'Frontend accessibility, WCAG, web accessibility standards',resp:'Accessibility Engineer with frontend/web focus for onsite role in Redmond WA.'},
-  // ── Apr 20 ──
   {id:'19dae451a43a9eb4',date:'2026-04-20',title:'Full Stack Developer',company:'',agency:'Tanisha Systems',recruiter:'Aditya Gautam',email:'Aditya.Gautam@tanishasystems.com',phone:'',location:'Santa Clara, CA (Onsite)',type:'Full-time',salary:'',must:'Full stack development',resp:'Full Stack Developer FTE role onsite in Santa Clara CA.'},
   {id:'19dac8b108b379db',date:'2026-04-20',title:'Full Stack Developer',company:'',agency:'Tanisha Systems',recruiter:'Anish Singh',email:'Anish.Singh@tanishasystems.com',phone:'',location:'Santa Clara, CA (Onsite)',type:'Contract',salary:'',must:'Full stack development',resp:'Full Stack Developer contract role onsite in Santa Clara CA.'},
   {id:'19dab737c2b8ac04',date:'2026-04-20',title:'Senior UI Developer',company:'',agency:'Q1 Technologies',recruiter:'Ashish Rastogi',email:'Ashish.Rastogi@q1tech.com',phone:'',location:'Phoenix, AZ (Onsite)',type:'Full-time',salary:'',must:'Senior UI development',resp:'Senior UI Developer full-time role onsite in Phoenix AZ.'},
-  // ── Apr 17 ──
-  {id:'19d9c3400e1deb49',date:'2026-04-17',title:'Senior Software Engineer – UI/Frontend',company:'',agency:'OB Recruitment',recruiter:"Michael O'Brien",email:'michael@obrecruitment.com',phone:'',location:'',type:'Full-time',salary:'',must:'UI/Frontend engineering, senior level',resp:'Senior Software Engineer UI/Frontend positions across multiple opportunities.'},
-  // ── Apr 16 ──
+  {id:'19d9c3400e1deb49',date:'2026-04-17',title:'Senior Software Engineer - UI/Frontend',company:'',agency:'OB Recruitment',recruiter:"Michael O'Brien",email:'michael@obrecruitment.com',phone:'',location:'',type:'Full-time',salary:'',must:'UI/Frontend engineering, senior level',resp:'Senior Software Engineer UI/Frontend positions across multiple opportunities.'},
   {id:'19d9812f2b7fe62a',date:'2026-04-16',title:'Solutions Architect (Salesforce Health/Data Cloud)',company:'',agency:'Excelon Solutions',recruiter:'Ankit Yadav',email:'ankit.y@excelonsolutions.com',phone:'',location:'Remote',type:'Contract',salary:'',must:'Salesforce Health Cloud, Data Cloud, Solutions Architecture',resp:'Solutions Architect with Salesforce Health Cloud and Data Cloud expertise for remote contract.'},
   {id:'19d973f9f4fa473b',date:'2026-04-16',title:'Salesforce Technical Architect',company:'',agency:'Cardinals TS Inc.',recruiter:'Syed Muntazar',email:'syed.muntazar@cardinaltsinc.net',phone:'',location:'Atlanta, GA (Locals only)',type:'Contract',salary:'',must:'Salesforce Technical Architect, locals only',resp:'Salesforce Technical Architect in Atlanta GA. Local candidates only.'},
   {id:'19d97224b34f794f',date:'2026-04-16',title:'UI Architect',company:'',agency:'ZCL US',recruiter:'Kashish',email:'kashish@zclus.com',phone:'',location:'',type:'Contract',salary:'',must:'UI Architecture, senior level',resp:'UI Architect contract opportunity.'},
   {id:'19d96ed86736e0a1',date:'2026-04-16',title:'Microsoft Architect',company:'',agency:'Exaways',recruiter:'Murugan V',email:'Murugan.v@exaways.com',phone:'',location:'',type:'Contract',salary:'',must:'Microsoft architecture, Azure',resp:'Immediate hiring for Microsoft Architect role.'},
-  // ── Apr 15 ──
   {id:'19d9355bfcf2961f',date:'2026-04-15',title:'Salesforce ARM Solution Architect',company:'',agency:'Excelon Solutions',recruiter:'Prateek Srivastava',email:'prateek.srivastava@excelonsolutions.com',phone:'',location:'Remote',type:'W2',salary:'',must:'Salesforce ARM, Enterprise Architecture',resp:'Remote W2 Salesforce ARM Solution Architect / Enterprise Architect.'},
   {id:'19d923a09f5513b6',date:'2026-04-15',title:'Senior React JS Developer',company:'',agency:'Excelon Solutions',recruiter:'Afzal Khan',email:'afzal.khan@excelonsolutions.com',phone:'',location:'',type:'Contract',salary:'',must:'React JS, senior level',resp:'Senior React JS Developer contract opportunity.'},
   {id:'19d920e78a0722a2',date:'2026-04-15',title:'Sr Fullstack Developer',company:'',agency:'Thoughtwave Software',recruiter:'Gnaneswararao Pushadapu',email:'rao@thoughtwavesoft.com',phone:'',location:'Remote',type:'Contract',salary:'',must:'Full stack development, senior level',resp:'Sr Fullstack Developer on remote contract basis.'},
   {id:'19d91e376d2981bc',date:'2026-04-15',title:'UI Architect',company:'',agency:'TekisHub',recruiter:'Ahmed',email:'ahmed@tekishub.us',phone:'',location:'Reston, VA (100% Onsite)',type:'Contract',salary:'',must:'UI Architecture, senior level',resp:'UI Architect role 100% onsite in Reston VA.'},
   {id:'19d8f3e5ff8b99db',date:'2026-04-15',title:'UI Developer (React & Node)',company:'',agency:'Nityo Infotech',recruiter:'Reeba Saini',email:'reeba.s@nityo.com',phone:'',location:'',type:'Contract',salary:'',must:'React, Node.js, UI development',resp:'UI Developer with React and Node contract opportunity.'},
-  // ── Apr 14 ──
   {id:'19d8de2c15b43f1f',date:'2026-04-14',title:'Full Stack Developer',company:'',agency:'Tanisha Systems',recruiter:'Rahul Prajapati',email:'Rahul.prajapati@tanishasystems.com',phone:'',location:'Santa Clara, CA (Onsite)',type:'Contract',salary:'',must:'Full stack development',resp:'Full Stack Developer contract role onsite in Santa Clara CA.'},
   {id:'19d8de29c28ff65d',date:'2026-04-14',title:'Full Stack Developer (React/TypeScript/MongoDB)',company:'',agency:'Tanisha Systems',recruiter:'Anish Singh',email:'Anish.Singh@tanishasystems.com',phone:'',location:'Santa Clara, CA (Onsite)',type:'Contract',salary:'',must:'React, TypeScript, MongoDB, full stack',resp:'Full Stack Developer with React/TypeScript/MongoDB onsite in Santa Clara CA.'},
   {id:'19d8dcc6670b9fa9',date:'2026-04-14',title:'UI Architect',company:'',agency:'Tekgence',recruiter:'Shikhar Kumar',email:'shikhar.kumar@tekgence.com',phone:'',location:'Reston, VA (Onsite)',type:'Contract',salary:'',must:'UI Architecture, senior level',resp:'UI Architect onsite role in Reston VA.'},
-  // ── Apr 13 ──
   {id:'19d885f36a4ac8b7',date:'2026-04-13',title:'Salesforce Architect',company:'',agency:'Global Soft Systems',recruiter:'Prerna Mathur',email:'prerna@globalsoftsystems.com',phone:'',location:'Remote',type:'Contract',salary:'',must:'Salesforce Architecture',resp:'Remote Salesforce Architect contract opportunity.'},
-  // ── Apr 10 ──
   {id:'19d78409285c97d1',date:'2026-04-10',title:'Sr. Java Fullstack Developer',company:'',agency:'Tanisha Systems',recruiter:'Shobhit Kaushik',email:'shobhit.kaushik@tanishasystems.com',phone:'',location:'Mountain View, CA (Hybrid)',type:'Contract',salary:'',must:'Java, full stack, senior level',resp:'Sr. Java Fullstack Developer hybrid contract in Mountain View CA.'},
   {id:'19d78404bbec9ad6',date:'2026-04-10',title:'MuleSoft Architect',company:'',agency:'Natsoft',recruiter:'Abhishek Thakur',email:'abhishek.t@natsoft.us',phone:'',location:'Juno Beach, FL (Onsite day 1)',type:'Contract',salary:'',must:'MuleSoft architecture, integration',resp:'MuleSoft Architect onsite from day 1 in Juno Beach FL.'},
-  // ── Apr 9 ──
   {id:'19d73772a8fd5645',date:'2026-04-09',title:'Full Stack Java Developer',company:'',agency:'Evizot',recruiter:'Shefali Verma',email:'shefali.verma@evizot.com',phone:'',location:'',type:'Contract',salary:'',must:'Java, full stack development',resp:'Full Stack Java Developer contract opportunity.'},
   {id:'19d70a811f3a8e43',date:'2026-04-09',title:'Senior Software Engineer',company:'',agency:'LinkedIn referral',recruiter:'Aleksandra Z.',email:'',phone:'',location:'',type:'Full-time',salary:'',must:'Software engineering, senior level',resp:'Senior Software Engineer opportunity shared via LinkedIn.'},
-  // ── Apr 8 ──
   {id:'19d6ded9361a0d63',date:'2026-04-08',title:'Salesforce Developer',company:'',agency:'Centraprise Global',recruiter:'Shivam Gupta',email:'g.shivam@centraprise.com',phone:'',location:'Charlotte, NC (Onsite)',type:'Full-time',salary:'',must:'Salesforce development',resp:'Full-time Salesforce Developer onsite in Charlotte NC. Immediate interviews.'},
   {id:'19d6ded6a9cb8037',date:'2026-04-08',title:'Salesforce Architect (Banking/Finance)',company:'',agency:'KTEK Resourcing',recruiter:'Deepesh Sharma',email:'deepesh.sharma1@ktekresourcing.com',phone:'',location:'Atlanta, GA (Local only)',type:'Contract',salary:'',must:'Salesforce Architect, Banking/Financial Services, merger experience, locals only',resp:'Salesforce Architect with Banking/Finance domain and merger experience. Atlanta locals only.'},
   {id:'19d6de1dd9dfba16',date:'2026-04-08',title:'Sr Gen AI Lead',company:'',agency:'Fisec Global',recruiter:'Suneel Kumar',email:'suneel.t@fisecglobal.net',phone:'',location:'',type:'Contract',salary:'',must:'Gen AI, technical lead',resp:'Senior Gen AI Lead contract opportunity.'},
   {id:'19d6dd30a1870a92',date:'2026-04-08',title:'UI Architect',company:'',agency:'Tekgence',recruiter:'Vikash Saraswat',email:'vikash.s@tekgence.com',phone:'',location:'Reston, VA (Onsite)',type:'Contract',salary:'',must:'UI Architecture',resp:'UI Architect onsite role in Reston VA.'},
-  {id:'19d6dd2f573a8c54',date:'2026-04-08',title:'UI Architect (LLMs & Gen AI)',company:'',agency:'Brillius',recruiter:'Imran Khan',email:'imrank@brillius.com',phone:'',location:'',type:'Contract',salary:'',must:'UI Architecture, LLMs, Generative AI (mandatory)',resp:'UI Architect with LLMs and Generative AI experience. AI is mandatory. Running interviews.'},
+  {id:'19d6dd2f573a8c54',date:'2026-04-08',title:'UI Architect (LLMs & Gen AI)',company:'',agency:'Brillius',recruiter:'Imran Khan',email:'imrank@brillius.com',phone:'',location:'',type:'Contract',salary:'',must:'UI Architecture, LLMs, Generative AI (mandatory)',resp:'UI Architect with LLMs and Gen AI experience. AI is mandatory. Running interviews.'},
   {id:'19d6dd2dced7ef62',date:'2026-04-08',title:'Full Stack (React/Node) Developer',company:'',agency:'1Point Systems',recruiter:'Vikas Ojha',email:'vikas.ojha@1pointsys.com',phone:'',location:'Sunnyvale, CA (Onsite)',type:'W2',salary:'',must:'React, Node.js, W2',resp:'Full stack React/Node developer on W2 contract in Sunnyvale CA.'},
-  // ── Apr 7 ──
   {id:'19d69fe367e85d9f',date:'2026-04-07',title:'Java Architect with Angular',company:'',agency:'Excelon Solutions',recruiter:'Alok Singh',email:'alok.singh@excelonsolutions.com',phone:'',location:'San Jose, CA (Onsite)',type:'W2',salary:'',must:'Java architecture, Angular, W2',resp:'Java Architect with Angular for W2 role onsite in San Jose CA.'},
   {id:'19d69fdca9de0e2a',date:'2026-04-07',title:'Salesforce Lead',company:'',agency:'HR Pundits',recruiter:'Prashanth Kumar',email:'Prashanthk@hrpundits.com',phone:'312-216-0850',location:'Remote',type:'Contract',salary:'',must:'Salesforce Lead developer',resp:'Salesforce Lead on remote contract basis.'},
   {id:'19d6672022c55e92',date:'2026-04-07',title:'Sr. Java Developer',company:'',agency:'Tekgence',recruiter:'Shikhar Kumar',email:'shikhar.kumar@tekgence.com',phone:'',location:'Austin, TX (Onsite)',type:'Contract',salary:'',must:'Java, senior level',resp:'Senior Java Developer onsite role in Austin TX.'},
   {id:'19d6671cb96d0729',date:'2026-04-07',title:'Citrix Solution Architect',company:'',agency:'Sri Tech Solutions',recruiter:'Chintada Annapurna',email:'anu.c@sritechsolutions.com',phone:'',location:'',type:'Contract',salary:'',must:'Citrix, solution architecture',resp:'Citrix Solution Architect contract opportunity.'},
   {id:'19d66719fe1fbf72',date:'2026-04-07',title:'UI React Developer',company:'',agency:'Yotta Systems',recruiter:'Kapil Dubey',email:'kapil@yottasys.com',phone:'',location:'Pittsburgh, PA (Onsite)',type:'Contract',salary:'',must:'React, UI development',resp:'UI React Developer contract role onsite in Pittsburgh PA.'},
   {id:'19d66717ae663006',date:'2026-04-07',title:'Citrix Solution Architect',company:'',agency:'Excelon Solutions',recruiter:'Ashwani Jaiswal',email:'ashwani.jaiswal@excelonsolutions.com',phone:'',location:'Milpitas, CA (Onsite)',type:'Contract',salary:'',must:'Citrix, solution architecture',resp:'Citrix Solution Architect onsite in Milpitas CA.'},
-  // ── Apr 6 ──
   {id:'19d64c5679b85f0d',date:'2026-04-06',title:'Frontend Software Developer (ReactJS)',company:'',agency:'JS Consulting Solution',recruiter:'Ayushi Sharma',email:'ayushi.s@jscsolution.com',phone:'+1 (732) 279-2373',location:'Sunnyvale, CA (Hybrid)',type:'Contract',salary:'6+ months',must:'HTML, CSS, JavaScript, ReactJS, 5-10 yrs exp, USC/GC, ex-Apple or enterprise exp',resp:'Frontend ReactJS developer for 6+ month hybrid contract in Sunnyvale. Must have Apple or enterprise experience.'},
-  // ── Apr 3 ──
   {id:'19d54ecba49e4b71',date:'2026-04-03',title:'React UI Developer',company:'',agency:'Yotta Systems Inc.',recruiter:'Preet Tommar',email:'preet@yottasys.com',phone:'',location:'Pittsburgh, PA (Onsite)',type:'W2',salary:'H1B transfer OK',must:'React.js, JavaScript/TypeScript, HTML5, CSS3, REST APIs, Git, 12+ years experience',resp:'React UI Developer on W2 contract in Pittsburgh PA. H1B transfer acceptable.'},
-  {id:'19d5432f4d55ec11',date:'2026-04-03',title:'Salesforce QA Testing',company:'',agency:'ClifyX Inc.',recruiter:'Darshan More',email:'darshan@clifyx.com',phone:'(908) 382-6615',location:'Irvine, CA (Hybrid)',type:'W2',salary:'',must:'Salesforce QA, automation testing in SFDC, Java/JavaScript automation, test strategy',resp:'Salesforce QA role requiring system testing, integration testing, and automation within SFDC. Defect management.'},
+  {id:'19d5432f4d55ec11',date:'2026-04-03',title:'Salesforce QA Testing',company:'',agency:'ClifyX Inc.',recruiter:'Darshan More',email:'darshan@clifyx.com',phone:'(908) 382-6615',location:'Irvine, CA (Hybrid)',type:'W2',salary:'',must:'Salesforce QA, automation testing in SFDC, Java/JavaScript automation, test strategy',resp:'Salesforce QA role requiring system testing, integration testing, and automation within SFDC.'},
   {id:'19d5403407d3817f',date:'2026-04-03',title:'UI Technical Lead',company:'',agency:'IMCS Group',recruiter:'Arvind Sahani',email:'arvind.sahani@imcsgroup.net',phone:'+1 (682) 260-6928',location:'Ewing, NJ (Onsite)',type:'Contract',salary:'6+ months',must:'React.js, Redux, Hooks, HOCs, JavaScript ES6+, HTML5, CSS3, REST APIs, Webpack, Git, CI/CD',resp:'Lead frontend architecture using React.js and Redux. Own UI technical design, enforce coding standards, mentor developers.'},
-  {id:'19d53fdd1ee79931',date:'2026-04-03',title:'UI/Front End Architect',company:'',agency:'Natsoft Corporation',recruiter:'Mekala Sai Vinay',email:'sai.vinay@natsoft.us',phone:'',location:'Plano, TX (Hybrid)',type:'Contract',salary:'',must:'HTML, CSS, JavaScript, React or Vue, Node.js, NPM, Webpack, Jest/Cypress, 15-20 yrs exp',resp:'Lead and mentor frontend developers building enterprise-scale interfaces. 15-20 years experience required.'},
+  {id:'19d53fdd1ee79931',date:'2026-04-03',title:'UI/Front End Architect',company:'',agency:'Natsoft Corporation',recruiter:'Mekala Sai Vinay',email:'sai.vinay@natsoft.us',phone:'',location:'Plano, TX (Hybrid)',type:'Contract',salary:'',must:'HTML, CSS, JavaScript, React or Vue, Node.js, Webpack, Jest/Cypress, 15-20 yrs exp',resp:'Lead and mentor frontend developers building enterprise-scale interfaces. 15-20 years experience required.'},
   {id:'19d53fd73faa49c7',date:'2026-04-03',title:'Lead Vibe Coding Engineer',company:'',agency:'Tekaccel Inc.',recruiter:'Divyanshu Kumar',email:'divyanshu@tekaccel.com',phone:'469-820-0644',location:'Woodland Hills, CA (Onsite)',type:'Contract',salary:'Long term',must:'JavaScript/TypeScript, Java, Python, React, Next.js, Node.js, GitHub Copilot, Claude/ChatGPT, prompt engineering, 8+ yrs',resp:'Senior/Lead engineer combining deep engineering with AI-assisted development. Set standards for AI collaboration, own architecture.'},
-  // ── Apr 2 ──
   {id:'19d4ff736a11271d',date:'2026-04-02',title:'UI Technical Lead/Architect',company:'',agency:'Scalable Systems',recruiter:'Ayushi Kaushik',email:'ayushi.kaushik@scalable-systems.com',phone:'',location:'Ewing, NJ (Onsite)',type:'C2C',salary:'$75/hr C2C',must:'React.js, Redux, Hooks, HOCs, JavaScript ES6+, HTML5, CSS3, REST APIs, CI/CD, 16+ yrs',resp:'Seasoned UI Technical Lead 16+ years to lead frontend architecture. Hands-on mastery plus strategic leadership.'},
   {id:'19d4ebff2d403bea',date:'2026-04-02',title:'Digital Experience Architect',company:'',agency:'Tanisha Systems',recruiter:'Anish Singh',email:'Anish.Singh@tanishasystems.com',phone:'(732) 852-7305 x757',location:'Sunnyvale, CA (Onsite)',type:'Full-time',salary:'',must:'AEM Architecture, Data Grid Integration, React frontend, CI/CD automation, AI/LLM readiness',resp:'Own end-to-end architecture connecting AEM and Data Grid to React frontend. Define testability standards at Apple.'},
-  {id:'19d4c423079d4488',date:'2026-04-02',title:'Salesforce Business Systems Analyst',company:'',agency:'Nityo Infotech',recruiter:'Avneesh Tyagi',email:'avneesh.tyagi@nityo.com',phone:'',location:'Pleasanton, CA (Hybrid, 3 days)',type:'W2',salary:'$55/hr W2',must:'Salesforce (Cases, configs, flows), business analysis, requirements gathering',resp:'Partner with stakeholders to translate complex needs into Salesforce requirements. Bridge between business and technical. No H1B/OPT.'},
-  // ── Apr 1 ──
+  {id:'19d4c423079d4488',date:'2026-04-02',title:'Salesforce Business Systems Analyst',company:'',agency:'Nityo Infotech',recruiter:'Avneesh Tyagi',email:'avneesh.tyagi@nityo.com',phone:'',location:'Pleasanton, CA (Hybrid, 3 days)',type:'W2',salary:'$55/hr W2',must:'Salesforce (Cases, configs, flows), business analysis, requirements gathering',resp:'Partner with stakeholders to translate complex needs into Salesforce requirements. No H1B/OPT.'},
   {id:'19d4abae370ebb41',date:'2026-04-01',title:'UI Architect',company:'TCS',agency:'Sage IT Inc.',recruiter:'Mohammed Abdul Sameer',email:'asameer@sageitinc.net',phone:'',location:'Reston, VA (Onsite)',type:'Contract',salary:'6 months',must:'React 5+ yrs, Remix or Next.js 2+ yrs, TypeScript, LLM/GenAI integration, AWS, CI/CD',resp:'Architect enterprise-grade UI platform for TCS. Integrate LLMs/GenAI into customer-facing tools.'},
   {id:'19d4ab8a1cd99fec',date:'2026-04-01',title:'UI Architect',company:'TCS',agency:'iTech US Inc.',recruiter:'Pradeep Kumar',email:'pradeep.k@itech-us.com',phone:'802-243-2157',location:'Reston, VA (Onsite)',type:'C2C',salary:'$60/hr C2C max',must:'React 5+ yrs, Remix or Next.js 2+ yrs, TypeScript, LLM/GenAI integration, prompt engineering, AWS',resp:'Architect enterprise-grade UI platforms for TCS. Integrate LLMs and GenAI. Establish architecture standards.'},
 ];
 
 let statusMap = {};
+let currentView = localStorage.getItem('jobView') || 'card';
+let sortCol = 'date';
+let sortDir = -1;
 
 async function loadStatuses() {
   try {
@@ -262,32 +327,68 @@ async function saveStatus(id, val) {
   try { await window.storage.set('job_statuses', JSON.stringify(statusMap), true); } catch(e) {}
 }
 
+function toggleDark() {
+  const html = document.documentElement;
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  document.getElementById('btn-dark').textContent = isDark ? '◑ Dark' : '☀ Light';
+  localStorage.setItem('jobTheme', isDark ? 'light' : 'dark');
+}
+
+function setView(v) {
+  currentView = v;
+  localStorage.setItem('jobView', v);
+  document.getElementById('btn-card').classList.toggle('active', v === 'card');
+  document.getElementById('btn-table').classList.toggle('active', v === 'table');
+  document.getElementById('grid').classList.toggle('hidden', v !== 'card');
+  document.getElementById('tbl-wrap').classList.toggle('show', v === 'table');
+  render();
+}
+
+function sortBy(col) {
+  if (sortCol === col) sortDir *= -1;
+  else { sortCol = col; sortDir = col === 'date' ? -1 : 1; }
+  document.querySelectorAll('th').forEach(t => t.classList.remove('sorted'));
+  const th = document.getElementById('th-' + col);
+  if (th) th.classList.add('sorted');
+  render();
+}
+
 function initials(s) {
   if (!s) return '?';
   return s.trim().split(/\s+/).slice(0,2).map(w=>w[0]||'').join('').toUpperCase() || '?';
 }
 
 function locClass(l) {
-  if (!l) return 'pill-loc';
+  if (!l) return 'p-loc';
   const lo = l.toLowerCase();
-  if (lo.includes('remote')) return 'pill-remote';
-  if (lo.includes('hybrid')) return 'pill-hybrid';
-  return 'pill-loc';
+  if (lo.includes('remote')) return 'p-rem';
+  if (lo.includes('hybrid')) return 'p-hyb';
+  return 'p-loc';
 }
 
 function skillTags(str) {
   if (!str) return '';
   return str.split(',').map(s=>s.trim()).filter(Boolean).slice(0,5)
-    .map(s=>`<span class="skill-tag">${s}</span>`).join('');
+    .map(s=>`<span class="stag">${s}</span>`).join('');
 }
 
-function render() {
+function statusSel(id, st) {
+  return `<select class="ss status-${st}" data-id="${id}" onchange="handleStatus('${id}',this)">
+    <option ${st==='New'?'selected':''}>New</option>
+    <option ${st==='Reviewed'?'selected':''}>Reviewed</option>
+    <option ${st==='Applied'?'selected':''}>Applied</option>
+    <option ${st==='Pass'?'selected':''}>Pass</option>
+  </select>`;
+}
+
+function getFiltered() {
   const q = document.getElementById('q').value.toLowerCase();
   const ft = document.getElementById('f-type').value.toLowerCase();
   const fl = document.getElementById('f-loc').value.toLowerCase();
   const fs = document.getElementById('f-status').value;
 
-  const filtered = JOBS.filter(j => {
+  return JOBS.filter(j => {
     const st = statusMap[j.id] || 'New';
     const text = [j.title,j.company,j.agency,j.must,j.location,j.recruiter,j.resp].join(' ').toLowerCase();
     if (q && !text.includes(q)) return false;
@@ -295,59 +396,95 @@ function render() {
     if (fl && !(j.location||'').toLowerCase().includes(fl)) return false;
     if (fs && st !== fs) return false;
     return true;
+  }).sort((a,b) => {
+    const av = a[sortCol]||'', bv = b[sortCol]||'';
+    return av < bv ? -sortDir : av > bv ? sortDir : 0;
   });
+}
 
-  document.getElementById('count').textContent = `${filtered.length} jobs`;
-
+function renderCards(filtered) {
   const grid = document.getElementById('grid');
   if (!filtered.length) {
     grid.innerHTML = `<div class="empty"><div class="empty-icon">◎</div><div class="empty-title">No jobs match</div><p>Try adjusting your filters</p></div>`;
     return;
   }
-
   grid.innerHTML = filtered.map(j => {
     const st = statusMap[j.id] || 'New';
     const sub = j.company || j.agency || '—';
     const showAgency = j.company && j.agency;
     return `<div class="card">
       <div class="card-top">
-        <div class="card-left">
-          <div class="avatar">${initials(sub)}</div>
-          <div class="card-titles">
-            <div class="card-title" title="${j.title}">${j.title}</div>
-            <div class="card-sub">${sub}</div>
-            ${showAgency ? `<div class="card-agency">via ${j.agency}</div>` : ''}
+        <div class="cl">
+          <div class="av">${initials(sub)}</div>
+          <div class="ct">
+            <div class="ctitle" title="${j.title}">${j.title}</div>
+            <div class="csub">${sub}</div>
+            ${showAgency ? `<div class="cagency">via ${j.agency}</div>` : ''}
           </div>
         </div>
-        <select class="status-select status-${st}" data-id="${j.id}" onchange="handleStatus('${j.id}',this)">
-          <option ${st==='New'?'selected':''}>New</option>
-          <option ${st==='Reviewed'?'selected':''}>Reviewed</option>
-          <option ${st==='Applied'?'selected':''}>Applied</option>
-          <option ${st==='Pass'?'selected':''}>Pass</option>
-        </select>
+        ${statusSel(j.id, st)}
       </div>
       <div class="pills">
         ${j.location ? `<span class="pill ${locClass(j.location)}">${j.location}</span>` : ''}
-        ${j.type ? `<span class="pill pill-type">${j.type}</span>` : ''}
-        ${j.salary ? `<span class="pill pill-salary">${j.salary}</span>` : ''}
+        ${j.type ? `<span class="pill p-type">${j.type}</span>` : ''}
+        ${j.salary ? `<span class="pill p-sal">${j.salary}</span>` : ''}
       </div>
-      ${j.must ? `<div><div class="skills-label">Required</div><div class="skill-tags">${skillTags(j.must)}</div></div>` : ''}
+      ${j.must ? `<div><div class="slbl">Required</div><div class="stags">${skillTags(j.must)}</div></div>` : ''}
       ${j.resp ? `<div class="resp">${j.resp}</div>` : ''}
-      <div class="card-footer">
-        <div class="recruiter">
+      <div class="cf">
+        <div class="rec">
           ${j.recruiter ? `<strong>${j.recruiter}</strong>` : ''}
           ${j.email ? `<a href="mailto:${j.email}">${j.email}</a>` : ''}
-          ${j.phone ? `<span style="font-size:10px;color:#bbb;"> · ${j.phone}</span>` : ''}
+          ${j.phone ? `<span style="font-size:10px;color:var(--text4);"> · ${j.phone}</span>` : ''}
         </div>
-        <div class="card-date">${j.date}</div>
+        <div class="cdate">${j.date}</div>
       </div>
     </div>`;
   }).join('');
 }
 
+function renderTable(filtered) {
+  const tbody = document.getElementById('tbl-body');
+  if (!filtered.length) {
+    tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:3rem;color:var(--text3);">No jobs match your filters</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = filtered.map(j => {
+    const st = statusMap[j.id] || 'New';
+    const sub = j.company || j.agency || '—';
+    const showAgency = j.company && j.agency;
+    const lc = locClass(j.location);
+    return `<tr>
+      <td class="t-date">${j.date}</td>
+      <td>
+        <div class="t-title">${j.title}</div>
+        <div class="t-sub">${sub}</div>
+        ${showAgency ? `<div class="t-agency">via ${j.agency}</div>` : ''}
+      </td>
+      <td>${j.location ? `<span class="pill ${lc}" style="font-size:11px;white-space:normal;display:inline-block;">${j.location}</span>` : '<span style="color:var(--text4);">—</span>'}</td>
+      <td>${j.type ? `<span class="pill p-type" style="font-size:11px;white-space:normal;display:inline-block;">${j.type}</span>` : ''}</td>
+      <td>${j.salary ? `<span class="pill p-sal" style="font-size:11px;white-space:normal;display:inline-block;">${j.salary}</span>` : '<span style="color:var(--text4);">—</span>'}</td>
+      <td class="t-must">${j.must || '<span style="color:var(--text4);">—</span>'}</td>
+      <td class="t-rec">
+        ${j.recruiter ? `<span>${j.recruiter}</span>` : ''}
+        ${j.email ? `<a href="mailto:${j.email}">${j.email}</a>` : ''}
+        ${j.phone ? `<span style="font-size:10px;color:var(--text4);">${j.phone}</span>` : ''}
+      </td>
+      <td>${statusSel(j.id, st)}</td>
+    </tr>`;
+  }).join('');
+}
+
+function render() {
+  const filtered = getFiltered();
+  document.getElementById('count').textContent = `${filtered.length} jobs`;
+  if (currentView === 'card') renderCards(filtered);
+  else renderTable(filtered);
+}
+
 function handleStatus(id, sel) {
   const val = sel.value;
-  sel.className = 'status-select status-' + val;
+  sel.className = `ss status-${val}`;
   saveStatus(id, val);
 }
 
@@ -366,6 +503,19 @@ function populateLocs() {
 }
 
 async function init() {
+  // restore theme
+  const savedTheme = localStorage.getItem('jobTheme') || 'light';
+  document.documentElement.setAttribute('data-theme', savedTheme);
+  document.getElementById('btn-dark').textContent = savedTheme === 'dark' ? '☀ Light' : '◑ Dark';
+
+  // restore view
+  const savedView = localStorage.getItem('jobView') || 'card';
+  currentView = savedView;
+  document.getElementById('btn-card').classList.toggle('active', savedView === 'card');
+  document.getElementById('btn-table').classList.toggle('active', savedView === 'table');
+  document.getElementById('grid').classList.toggle('hidden', savedView !== 'card');
+  document.getElementById('tbl-wrap').classList.toggle('show', savedView === 'table');
+
   await loadStatuses();
   populateLocs();
   render();
