@@ -151,7 +151,7 @@
   <div class="logo">
     <div class="logo-dot"></div>
     <span class="logo-text">US Jobs Board</span>
-    <span class="logo-sub">Mandala of Light</span>
+    
   </div>
   <div class="top-right">
     <span class="updated">May 17, 2026</span>
@@ -508,6 +508,12 @@ function populateLocs() {
 }
 
 async function init() {
+  // Set today's date dynamically
+  const today = new Date();
+  const dateStr = today.toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'});
+  const el = document.getElementById('updated-date');
+  if (el) el.textContent = 'Updated ' + dateStr;
+
   // restore theme
   const savedTheme = localStorage.getItem('jobTheme') || 'light';
   document.documentElement.setAttribute('data-theme', savedTheme);
