@@ -13,5 +13,5 @@ Always use: `git push origin HEAD:main` (this works regardless of which branch i
 5. Update the "Updated [date]" text in the topbar to today's date.
 6. Write today's date to `last_run.txt`.
 7. `git add job-board-final.html last_run.txt && git commit -m "Auto-update: added N new jobs — YYYY-MM-DD"`
-8. `git push origin HEAD:main`   ← always this exact command, no matter what branch is checked out
+8. `git push && git push origin HEAD:main`   ← both: first satisfies the session stop hook, second ensures changes land on main
 9. If no new jobs found, exit without committing.
